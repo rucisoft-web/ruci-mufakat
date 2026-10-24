@@ -88,6 +88,7 @@ class DocumentService
     /** Revisi: salin metadata, naikkan versi, tautkan ke versi sebelumnya. */
     public function newVersion(Document $previous, array $attributes, ?User $user = null): Document
     {
+        $previous->refresh(); // pastikan nilai bawaan basis data (mis. version_no) terbaca
         $document = $previous->replicate(['sha256', 'page_count', 'file_path', 'mime', 'size']);
         $document->fill($attributes + [
             'previous_version_id' => $previous->id,

@@ -190,6 +190,49 @@ class Access
         return static::readableDocumentIds($user)->contains($document instanceof Document ? $document->id : $document);
     }
 
+    /**
+     * Organ yang register keputusannya boleh dibaca. Dewan Komisaris mengawasi pengurusan, sehingga anggotanya
+     * dapat membaca keputusan Direksi (bukan sebaliknya).
+     */
+    public static function decisionOrganIds(User $user): Collection
+    {
+        return static::remember($user, 'decisionOrgans', function () use ($user) {
+            $ids = static::organIds($user);
+
+            if ($user->isCommissioner() || $user->role === UserRole::Sekdekom) {
+                $ids = $ids->merge(Organ::where('kind', OrganKind::Direksi->value)->pluck('id'));
+            }
+
+            return $ids->unique()->values();
+        });
+    }
+
+    /** Tugas tindak lanjut: milik sendiri (PIC/verifikator) atau berasal dari organ yang boleh dilihat. */
+    public static function scopeTasks(Builder $query, User $user): Builder
+    {
+        if ($user->isDemoGuest() || $user->role === UserRole::Auditor || $user->isSecretariat()) {
+            return $query;
+        }
+
+        $organIds = static::organIds($user);
+
+        return $query->where(fn ($q) => $q->where('pic_id', $user->id)->orWhere('verifier_id', $user->id)
+            ->orWhereHas('decision', fn ($d) => $d->whereIn('organ_id', $organIds))
+            ->orWhereHas('agendaItem.meeting', fn ($m) => $m->whereIn('organ_id', $organIds)));
+    }
+
+    /** Permintaan informasi: organ yang boleh dilihat, atau pengguna sebagai peminta/PIC. */
+    public static function scopeInfoRequests(Builder $query, User $user): Builder
+    {
+        if ($user->isDemoGuest() || $user->role === UserRole::Auditor) {
+            return $query;
+        }
+
+        $organIds = static::organIds($user);
+
+        return $query->where(fn ($q) => $q->whereIn('organ_id', $organIds)->orWhere('requester_id', $user->id)->orWhere('pic_id', $user->id));
+    }
+
     /** Catat percobaan akses yang ditolak ke jejak audit. */
     public static function deny(User $user, string $what, mixed $subject = null): void
     {

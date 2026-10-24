@@ -95,7 +95,8 @@ class AiAssistant
             ] + $ctx['deterministic']);
         }
 
-        if (! $this->client->isConfigured()) {
+        // Tamu demo tidak memakai kuota API: selalu memakai referensi demo.
+        if (! $this->client->isConfigured() || $user->isDemoGuest()) {
             $scenario = config('mufakat.ai.demo_fallback') ? $this->scenarioFor($feature, $ctx) : null;
 
             if ($scenario) {

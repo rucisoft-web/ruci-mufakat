@@ -13,6 +13,21 @@ class Minute extends Model
 
     protected $guarded = [];
 
+    /** Risalah final tidak pernah ditimpa atau dihapus; koreksi selalu lewat addendum. */
+    protected static function booted(): void
+    {
+        static::updating(function (Minute $minute) {
+            if ($minute->getOriginal('status') === MinuteStatus::Final && $minute->isDirty(['body', 'status', 'content_hash', 'meeting_id'])) {
+                throw new \RuntimeException('Risalah final tidak dapat diubah. Gunakan koreksi/addendum.');
+            }
+        });
+        static::deleting(function (Minute $minute) {
+            if ($minute->status === MinuteStatus::Final) {
+                throw new \RuntimeException('Risalah final tidak dapat dihapus.');
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [

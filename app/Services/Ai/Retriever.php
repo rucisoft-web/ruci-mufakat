@@ -67,9 +67,12 @@ class Retriever
             ->map(function ($p) use ($terms) {
                 $text = mb_strtolower($p->heading.' '.$p->content);
                 $p->score = $terms->sum(fn ($t) => substr_count($text, $t));
+                $p->coverage = $terms->filter(fn ($t) => str_contains($text, $t))->count() / $terms->count();
 
                 return $p;
             })
+            // Halaman yang hanya memuat satu kata umum tidak dianggap bukti.
+            ->filter(fn ($p) => $p->coverage >= 0.5)
             ->sortByDesc('score')
             ->take($limit)
             ->values();
@@ -96,5 +99,5 @@ class Retriever
         ))->implode("\n\n---\n\n");
     }
 
-    public const STOPWORDS = ['yang', 'dan', 'atau', 'untuk', 'dari', 'dengan', 'pada', 'dalam', 'adalah', 'ini', 'itu', 'apa', 'apakah', 'berapa', 'bagaimana', 'mengapa', 'kapan', 'siapa', 'tahun', 'sudah', 'belum', 'akan', 'ada', 'tidak', 'oleh', 'sebagai', 'juga', 'the', 'and', 'jelaskan', 'tolong', 'mohon'];
+    public const STOPWORDS = ['yang', 'dan', 'atau', 'untuk', 'dari', 'dengan', 'pada', 'dalam', 'adalah', 'ini', 'itu', 'apa', 'apakah', 'berapa', 'bagaimana', 'mengapa', 'kapan', 'siapa', 'tahun', 'sudah', 'belum', 'akan', 'ada', 'tidak', 'oleh', 'sebagai', 'juga', 'the', 'and', 'jelaskan', 'tolong', 'mohon', 'jumlah', 'total', 'nilai', 'data', 'berikan', 'sebutkan'];
 }
