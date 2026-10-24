@@ -6,20 +6,33 @@ Contoh di panduan memakai akun cPanel `userku`, folder program `/home/userku/ruc
 
 ## 0. Cara tercepat: paket siap-upload (tanpa Terminal, tanpa edit file)
 
-1. Pastikan PHP domain sudah **8.3 atau lebih baru** (*MultiPHP Manager* atau *Select PHP Version*).
+Isi zip berada di dalam satu folder **`ruci-mufakat`**. Setelah diekstrak, folder itu yang menjadi lokasi program, dan domain/subdomain diarahkan ke subfolder **`ruci-mufakat/public`**.
+
+```
+/home/userku/
+├── public_html/          ← situs utama Anda (tidak disentuh)
+└── ruci-mufakat/         ← hasil ekstrak zip (program, .env, storage, vendor)
+    └── public/           ← document root subdomain mufakat.domainanda.com
+```
+
+1. Pastikan PHP **8.3 atau lebih baru** (*MultiPHP Manager* atau *Select PHP Version*).
 2. Buat database di cPanel › **MySQL Databases**: database, user, lalu *Add User To Database* dengan **ALL PRIVILEGES**. Catat nama database, user, dan kata sandinya.
-3. *File Manager* › buka folder tujuan, lalu **Upload** `ruci-mufakat-siap-upload.zip`. Folder tujuan bisa:
-   - `public_html` (domain utama), atau
-   - document root subdomain, misalnya `public_html/mufakat` untuk `mufakat.domainanda.com`.
-4. Klik kanan zip › **Extract** di folder itu juga, lalu hapus zip-nya. (Aktifkan *Settings › Show Hidden Files* agar `.env` dan `.htaccess` terlihat.)
-5. Buka alamat situs di browser. Halaman **Instalasi Ruci MUFAKAT** muncul otomatis dan menampilkan daftar pemeriksaan server. Semua harus ✓.
-6. Isi alamat situs, data database, nama/email/kata sandi administrator. Centang:
+3. *File Manager* › buka folder **home** (`/home/userku`, satu tingkat di atas `public_html`) › **Upload** `ruci-mufakat-siap-upload.zip`.
+4. Klik kanan zip › **Extract** › biarkan tujuannya `/home/userku` › *Extract Files*. Terbentuk folder `/home/userku/ruci-mufakat`. Hapus zip-nya.
+5. cPanel › **Domains** › *Create A New Domain*: isi `mufakat.domainanda.com`, **matikan** *Share document root*, lalu isi **Document Root** dengan `ruci-mufakat/public`. Simpan, lalu aktifkan SSL (*SSL/TLS Status* › Run AutoSSL).
+   - Domain/subdomain yang sudah ada: *Domains* › *Manage* › ubah *Document Root* menjadi `ruci-mufakat/public`.
+   - cPanel lama: *Subdomains* › isi subdomain, *Document Root* `ruci-mufakat/public`.
+6. PHP versi subdomain itu juga harus 8.3 (*MultiPHP Manager*).
+7. Buka `https://mufakat.domainanda.com`. Halaman **Instalasi Ruci MUFAKAT** muncul otomatis, menampilkan lokasi program, dan memeriksa server. Semua harus ✓.
+8. Isi alamat situs, data database, nama/email/kata sandi administrator. Centang:
    - **Muat data demo Kimia Farma** untuk situs promosi (mengaktifkan tombol *Masuk sebagai tamu*);
    - **Wajibkan MFA** untuk pemakaian sungguhan;
    - isi **kunci OpenAI** bila ingin AI sungguhan (boleh dikosongkan).
-7. Klik **Pasang sekarang** (sekitar 1 menit bila memuat data demo). Halaman selesai menampilkan alamat aplikasi dan perintah cron.
+9. Klik **Pasang sekarang** (sekitar 1 menit bila memuat data demo). Halaman selesai menampilkan alamat aplikasi dan perintah cron.
 
-Halaman instalasi otomatis mati setelah berhasil (`MUFAKAT_INSTALLER=false`) dan kunci aplikasi baru dibuat. File `.htaccess` di akar paket meneruskan semua permintaan ke folder `public` dan menolak akses ke `.env`, `storage`, serta `vendor`, jadi aman walaupun diekstrak langsung ke `public_html`.
+Halaman instalasi otomatis mati setelah berhasil (`MUFAKAT_INSTALLER=false`) dan kunci aplikasi baru dibuat.
+
+> **Jangan** membuka aplikasi sebagai subfolder, misalnya `domainanda.com/ruci-mufakat`. Laravel harus berada di akar sebuah domain atau subdomain. Bila zip terlanjur diekstrak di dalam `public_html` (menjadi `public_html/ruci-mufakat`), cukup arahkan document root subdomain ke `public_html/ruci-mufakat/public`. File `.htaccess` di folder program tetap menolak akses ke `.env`, `storage`, dan `vendor`, tetapi lokasi di luar `public_html` lebih aman.
 
 Langkah 1–7 di bawah adalah cara manual, tidak diperlukan bila memakai paket siap-upload.
 
@@ -40,7 +53,7 @@ Opsional: `pdftotext` (poppler-utils) membuat ekstraksi teks PDF lebih rapi. Tan
 
 Paling aman program diletakkan **di luar `public_html`**:
 
-1. Upload `ruci-mufakat-siap-upload.zip` ke `/home/userku`, buat folder `ruci-mufakat`, dan ekstrak di dalamnya.
+1. Upload `ruci-mufakat-siap-upload.zip` ke `/home/userku` dan ekstrak di sana; folder `ruci-mufakat` terbentuk otomatis.
 2. *Domains* › **Create A New Domain** (misalnya `mufakat.domainanda.com`), matikan *Share document root*, isi **Document Root**: `ruci-mufakat/public`.
 3. Aktifkan SSL untuk domain itu.
 

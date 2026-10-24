@@ -42,6 +42,7 @@
             <p><strong>Disarankan:</strong> di cPanel › <em>Cron Jobs</em>, tambahkan cron <em>Once Per Minute</em> agar sirkuler yang lewat batas waktu ditutup otomatis dan pengingat terkirim:</p>
                 <pre>{{ $cron }}</pre>
                 <p class="muted">Tanpa cron aplikasi tetap berjalan; status sirkuler diperbarui saat halamannya dibuka. Bila hosting memakai lokasi PHP lain, ganti <code>/usr/local/bin/php</code>.</p>
+            <p>Lokasi program: <code>{{ base_path() }}</code></p>
             <p>Aplikasi: <a href="{{ $appUrl }}/app">{{ $appUrl }}/app</a></p>
             @if ($demo)
                 <p>Data demo Kimia Farma dimuat. Akun demo: <code>komut@mufakat.demo</code>, <code>dirut@mufakat.demo</code>, <code>sekper@mufakat.demo</code>, <code>sekdekom@mufakat.demo</code> (dan lainnya), kata sandi <code>{{ config('mufakat.demo.password') }}</code>. Tombol "Masuk sebagai tamu" aktif di halaman login.</p>
@@ -49,6 +50,7 @@
             <a class="btn" href="{{ $appUrl }}/app">Buka aplikasi</a>
         </div>
     @else
+        <p>Lokasi program di server: <code>{{ base_path() }}</code>. Domain atau subdomain ini harus mengarah ke folder <code>{{ public_path() }}</code>.</p>
         <p class="muted">Isi data di bawah sekali saja. Siapkan dulu database MySQL di cPanel › <em>MySQL Databases</em> (buat database, buat user, lalu tambahkan user ke database dengan ALL PRIVILEGES).</p>
 
         <div class="card">
