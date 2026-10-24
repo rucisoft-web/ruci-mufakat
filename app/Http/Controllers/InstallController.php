@@ -21,7 +21,10 @@ class InstallController
 {
     public function show(Request $request)
     {
-        abort_unless(config('mufakat.installer'), 404);
+        // Sudah terpasang: arahkan ke halaman masuk alih-alih 404 yang membingungkan.
+        if (! config('mufakat.installer')) {
+            return redirect('/app/login');
+        }
 
         return view('install', ['checks' => $this->checks(), 'defaults' => ['app_url' => $request->root()]]);
     }
