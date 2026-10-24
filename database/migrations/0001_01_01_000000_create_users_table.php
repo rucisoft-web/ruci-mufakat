@@ -17,6 +17,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('title')->nullable();
+            $table->string('role', 30)->default('pic');
+            $table->string('phone', 40)->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_demo_alias')->default(false);
+            $table->dateTime('access_until')->nullable();
+            $table->text('app_authentication_secret')->nullable();
+            $table->text('app_authentication_recovery_codes')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
