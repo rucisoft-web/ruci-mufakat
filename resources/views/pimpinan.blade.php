@@ -39,7 +39,7 @@
     @if ($demo)
         <div class="mf-demo-banner" style="margin-bottom:16px"><span class="mf-demo-tag">DATA DEMO</span><span>Demo memakai profil dan angka Laporan Tahunan 2025 PT Kimia Farma Tbk. Rapat, keputusan, dan tindak lanjut di dalamnya adalah simulasi dengan alias "Demo …".</span></div>
     @endif
-    @include('partials.why')
+    @include('partials.why', ['publik' => true])
 </main>
 <footer>Ruci MUFAKAT · <a href="https://rucisoft.id" style="color:inherit;text-decoration:underline">Rucisoft</a> · <a href="https://rucisoft.id" style="color:inherit">rucisoft.id</a> · Laravel 13 + MySQL · siap cPanel</footer>
 </body>

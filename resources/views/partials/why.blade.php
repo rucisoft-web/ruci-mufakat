@@ -8,6 +8,10 @@
             ditambah asisten AI yang selalu menunjuk dokumen dan halaman sumber.</p>
     </section>
 
+    @if ($publik ?? false)
+        @include('partials.rucisoft-alur')
+    @endif
+
     <div class="mf-cycle">
         @foreach ([['Rencana', 'kalender & agenda'], ['Bahan', 'board book berversi'], ['Baca', 'ruang baca & anotasi'], ['Rapat', 'hadir aktual & kuorum'], ['Putuskan', 'suara per organ'], ['Risalah', 'tanda tangan & addendum'], ['Tindak lanjut', 'bukti diverifikasi']] as $i => [$t, $s])
             <div><b>{{ $i + 1 }}</b><span>{{ $t }}</span><small>{{ $s }}</small></div>
