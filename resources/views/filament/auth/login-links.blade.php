@@ -5,6 +5,7 @@
         <p>Tanpa akun. Tamu hanya dapat melihat data demo, tidak dapat mengubahnya.</p>
     @endif
     <a class="mf-login-why" href="{{ route('pimpinan') }}">Ruci MUFAKAT untuk Komisaris dan Direksi &rarr;</a>
+    <p>Produk <a href="https://rucisoft.id" style="color:inherit;text-decoration:underline">Rucisoft</a> &middot; <a href="https://rucisoft.id" style="color:inherit">rucisoft.id</a></p>
     @if ($guestUrl)
         <div class="mf-login-accounts">
             Akun demo per peran (kata sandi <code>{{ config('mufakat.demo.password') }}</code>):

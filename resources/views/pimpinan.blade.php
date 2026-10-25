@@ -29,6 +29,7 @@
     <div class="wrap">
         <a class="mf-auth-brand" href="{{ url('/') }}"><img src="{{ asset('favicon.svg') }}" alt="" width="32" height="32"><span>Ruci <b>MUFAKAT</b></span></a>
         <nav>
+            <a class="btn line" href="https://rucisoft.id">Rucisoft.id</a>
             @if ($guestUrl)<a class="btn gold" href="{{ $guestUrl }}">Lihat demo sebagai tamu</a>@endif
             <a class="btn line" href="{{ url('/app/login') }}">Masuk</a>
         </nav>
@@ -40,6 +41,6 @@
     @endif
     @include('partials.why')
 </main>
-<footer>Ruci MUFAKAT · Rucisoft · Laravel 13 + MySQL · siap cPanel</footer>
+<footer>Ruci MUFAKAT · <a href="https://rucisoft.id" style="color:inherit;text-decoration:underline">Rucisoft</a> · <a href="https://rucisoft.id" style="color:inherit">rucisoft.id</a> · Laravel 13 + MySQL · siap cPanel</footer>
 </body>
 </html>
